@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotty Dog Studio</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/favicons/site.webmanifest">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Quicksand:wght@300..700&display=swap');
+        :root {
+            --pink: #ff99ff;
+            --blue: #D6E5FF;
+            --orange: #FFCA9E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Navigation Styles */
+        .nav-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .hamburger {
+            width: 24px;
+            height: 20px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: #333;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span:nth-child(1) { top: 0; }
+        .hamburger span:nth-child(2) { top: 8px; }
+        .hamburger span:nth-child(3) { top: 16px; }
+
+        .nav-toggle.active .hamburger span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 8px;
+        }
+
+        .nav-toggle.active .hamburger span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.active .hamburger span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 8px;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: right 0.3s ease;
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .nav-menu a {
+            font-family: "Bubblegum Sans", serif;
+            font-size: 2.5rem;
+            color: #333;
+            text-decoration: none;
+            margin: 1rem 0;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--pink);
+            transform: scale(1.1);
+        }
+
+        section {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        p {
+            font-family: "Quicksand", serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        h1, h2 {
+            font-family: "Bubblegum Sans", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+         <!-- Styles for the preloader */-->
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .preloader img {
+            width: 150px;
+            height: auto;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Home Section */
+        #home {
+            position: relative;
+            overflow: hidden;
+            background-color: transparent;
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .background-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            max-width: 100%;
+            <!--max-height: 100%; -->
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -1;
+        }
+
+        #home h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        #home p {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+        }
+
+        /* Services Section */
+        #services {
+            background-color: var(--blue);
+            padding: 2rem 1rem;
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            padding: 1rem;
+        }
+
+        .service-column {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            min-height: 450px;
+            overflow: hidden;
+        }
+
+        .service-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            background: #f0f0f0;
+        }
+
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .service-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-content h2 {
+            margin-bottom: 1rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+        }
+
+        .service-buttons {
+            margin-top: auto;
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--pink);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #333;
+            border: 2px solid var(--pink);
+        }
+
+        /* About Section */
+        #about {
+            background-color: var(--orange);
+            padding: 2rem 1rem;
+        }
+
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            padding: 1rem;
+        }
+
+        .portrait-frame {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .portrait-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .about-text {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .about-text h2 {
+            margin-bottom: 1rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+        }
+
+        <!--Social icons.-->
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .social-icons a {
+            color: #333;
+            transition: color 0.3s ease;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-icons a:hover {
+            color: var(--pink);
+        }
+
+        /* Media Queries */
+        @media (min-width: 768px) {
+            .about-container {
+                grid-template-columns: 1fr 2fr;
+            }
+
+            .portrait-frame {
+                width: 300px;
+                height: 300px;
+            }
+
+            .btn {
+                width: auto;
+            }
+
+            .nav-dots {
+                left: 2rem;
+                right: auto;
+            }
+
+            .nav-dot-label {
+                left: 24px;
+                right: auto;
+            }
+
+            .nav-dot:hover .nav-dot-label {
+                left: 28px;
+                right: auto;
+            }
+
+            section {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .services-container {
+                grid-template-columns: 1fr;
+            }
+
+            .service-column {
+                margin: 0 auto;
+                max-width: 400px;
+            }
+
+            .background-video {
+                max-height: 100%;
+                min-width: none;
+                max-width: none;
+
+        }
+
+        @media (max-height: 600px) {
+            section {
+                padding: 4rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preloader">
+        <img src="logo.webp" alt="Spotty Dog Studio Logo">
+    </div>
+    <div class="nav-toggle">
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <nav class="nav-menu">
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+    </nav>
+
+
+    <section id="home">
+        <video class="background-video" autoplay loop muted playsinline>
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <h1>Spotty Dog Studio</h1>
+        <p>Art, crafts and messy play classes for kids.</p>
+        <a href="https://bookwhen.com/spottydog" class="btn btn-primary" style="margin-top: 2rem; font-size: 1.2rem; padding: 1rem 2rem;">Book Now</a>
+    </section>
+
+    <section id="services">
+        <div class="services-container">
+            <div class="service-column">
+                <div class="service-image">
+                    <img src="makers.jpg" alt="Mini Makers" />
+                </div>
+                <div class="service-content">
+                    <h2>Mini Makers</h2>
+                    <p>Creative sessions designed specifically for our youngest artists. Explore, create, and have fun in a safe and nurturing environment.</p>
+                    <div class="service-buttons">
+                        <button class="btn btn-primary">Coming Soon</button>
+                        <button class="btn btn-secondary">More Info</button>
+                    </div>
+                </div>
+            </div>
+            <div class="service-column">
+                <div class="service-image">
+                    <img src="art.jpg" alt="Arts and Crafts" />
+                </div>
+                <div class="service-content">
+                    <h2>Arts and Crafts</h2>
+                    <p>Discover various art forms and craft techniques in our engaging sessions. Perfect for budding artists who love to create and learn.</p>
+                    <div class="service-buttons">
+                        <button class="btn btn-primary">Coming Soon</button>
+                        <button class="btn btn-secondary">More Info</button>
+                    </div>
+                </div>
+            </div>
+            <div class="service-column">
+                <div class="service-image">
+                    <img src="messy.jpg" alt="Messy Play" />
+                </div>
+                <div class="service-content">
+                    <h2>Messy Play</h2>
+                    <p>Get ready to splash, squish, and explore in our messy play sessions. A sensory adventure perfect for curious minds.</p>
+                    <div class="service-buttons">
+                        <a href="https://bookwhen.com/spottydog"><button class="btn btn-primary">Book Now</button></a>
+                        <button class="btn btn-secondary">More Info</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="about-container">
+            <div class="portrait-frame">
+                <img src="melly.jpg" alt="Portrait of Melly" />
+            </div>
+            <div class="about-text">
+                <h2>About Spotty Dog</h2>
+                <p>At Spotty Dog Studio, we believe creativity should be loud, messy, and full of joy (and maybe just a little bit of glitter that never quite vacates the premises). Run by Melly Dougan, a long-time teacher with a passion for bringing out the artist in every child, our studio is a colourful haven for little creators.</p>
+                <p>We offer messy play, arts and crafts, and our much-loved Mini Makers classes, where kids get hands-on with exciting craft projects. Whether they're painting, sculpting, gluing, or constructing, every session is designed to spark imagination and celebrate the magic of making.</p>
+                <p>So, if your child loves getting creative (and you love not having to clean up the aftermath), Spotty Dog Studio is the place to be!</p>
+            </div>
+        </div>
+        <div class="social-icons">
+            <a href="https://facebook.com/spottydogstudio" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+            <a href="https://instagram.com/spottydogstudio" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+            <a href="tel:+447123456789" aria-label="Phone"><i data-lucide="phone"></i></a>
+            <a href="mailto:hello@spottydogstudio.com" aria-label="Email"><i data-lucide="mail"></i></a>
+        </div>
+    </section>
+
+    <script>
+            // Wait for all content to load
+        window.addEventListener('load', function() {
+            // Hide preloader
+            const preloader = document.querySelector('.preloader');
+            preloader.classList.add('fade-out');
+            
+            // Remove preloader from DOM after animation
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500);
+        });
+
+        // Initialize Lucide icons after DOM content is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize navigation
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            const navLinks = document.querySelectorAll('.nav-menu a');
+
+            navToggle.addEventListener('click', () => {
+                navToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // Initialize Lucide icons
+            lucide.createIcons();
+        });
+    </script>
+    </script>
+</body>
+</html>

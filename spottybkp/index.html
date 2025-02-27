@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotty Dog Studio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Quicksand:wght@300..700&display=swap');
+        :root {
+            --pink: #FFD6E0;
+            --blue: #D6E5FF;
+            --yellow: #FFF4D6;
+            --orange: #FFCA9E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        height: 100%;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        section {
+            height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        p {
+            font-family: "Quicksand", serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        h1, h2 {
+            font-family: "Bubblegum Sans", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 2px solid black;
+            border-radius: 50%;
+            margin-color: black;
+            margin: 1rem 0;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            width: 16px;
+            height: 16px;
+        }
+
+        .nav-dot-label {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-dot:hover .nav-dot-label {
+            opacity: 1;
+            left: 28px;
+        }
+
+        /* Home Section */
+        #home {
+            background-color: var(--pink);
+            flex-direction: column;
+            text-align: center;
+        }
+
+        #home h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        #home p {
+            font-size: 1.5rem;
+        }
+
+        /* Services Section */
+        #services {
+            background-color: var(--blue);
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .service-column {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0;
+            border-radius: 1rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            overflow: hidden;
+            position: relative;
+        }
+
+
+        .service-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            background: #f0f0f0;
+        }
+
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .service-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-content h2 {
+            margin-bottom: 1rem;
+        }
+
+        .service-buttons {
+            margin-top: auto;
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--pink);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #333;
+            border: 2px solid var(--pink);
+        }
+
+        /* About Section */
+        #about {
+            background-color: var(--orange);
+        }
+
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .portrait-frame {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .portrait-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .about-text {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+
+        .bubblegum-sans-regular {
+            font-family: "Bubblegum Sans", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        .quicksand-regular {
+            font-family: "Quicksand", serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="nav-dots">
+        <div class="nav-dot active" style="background: var(--pink)" data-section="home">
+            <span class="nav-dot-label">Home</span>
+        </div>
+        <div class="nav-dot" style="background: var(--blue)" data-section="services">
+            <span class="nav-dot-label">Services</span>
+        </div>
+        <div class="nav-dot" style="background: var(--orange)" data-section="about">
+            <span class="nav-dot-label">About</span>
+        </div>
+    </nav>
+
+    <section id="home">
+        <h1 class="bubblegum-sans-regular">Spotty Dog Studio</h1>
+        <p class="quicksand-regular">Art, crafts and messy play classes for kids.</p>
+        <!-- Background image will be added here -->
+    </section>
+
+        <section id="services">
+        <div class="services-container">
+            <div class="service-column">
+                <div class="service-image">
+                    <img src="makers.jpg" alt="Mini Makers" />
+                </div>
+                <div class="service-content">
+                    <h2>Mini Makers</h2>
+                    <p>Creative sessions designed specifically for our youngest artists. Explore, create, and have fun in a safe and nurturing environment.</p>
+                    <div class="service-buttons">
+                        <button class="btn btn-primary">Book Now</button>
+                        <button class="btn btn-secondary">More Info</button>
+                    </div>
+                </div>
+            </div>
+            <div class="service-column">
+                <div class="service-image">
+                    <!-- Placeholder for Arts and Crafts image -->
+                    <img src="art.jpg" alt="Arts and Crafts" />
+                </div>
+                <div class="service-content">
+                    <h2>Arts and Crafts</h2>
+                    <p>Discover various art forms and craft techniques in our engaging sessions. Perfect for budding artists who love to create and learn.</p>
+                    <div class="service-buttons">
+                        <button class="btn btn-primary">Book Now</button>
+                        <button class="btn btn-secondary">More Info</button>
+                    </div>
+                </div>
+            </div>
+            <div class="service-column">
+                <div class="service-image">
+                    <!-- Placeholder for Messy Play image -->
+                    <img src="messy.jpg" alt="Messy Play" />
+                </div>
+                <div class="service-content">
+                    <h2>Messy Play</h2>
+                    <p>Get ready to splash, squish, and explore in our messy play sessions. A sensory adventure perfect for curious minds.</p>
+                    <div class="service-buttons">
+                        <a href="https://bookwhen.com/spottydog"><button class="btn btn-primary">Book Now</button></a>
+                        <button class="btn btn-secondary">More Info</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="about-container">
+            <div class="portrait-frame">
+                <!-- Portrait image will go here -->
+                <img src="melly.jpg" alt="Portrait of Melly" />
+            </div>
+            <div class="about-text">
+                <h2>About Spotty Dog</h2>
+                <p>At Spotty Dog Studio, we believe creativity should be loud, messy, and full of joy (and maybe just a little bit of glitter that never quite vacates the premises). Run by Melly Dougan, a long-time teacher with a passion for bringing out the artist in every child, our studio is a colourful haven for little creators.</p>
+                <p>We offer messy play, arts and crafts, and our much-loved Mini Makers classes, where kids get hands-on with exciting craft projects. Whether they’re painting, sculpting, gluing, or constructing, every session is designed to spark imagination and celebrate the magic of making.</p>
+
+                <p>So, if your child loves getting creative (and you love not having to clean up the aftermath), Spotty Dog Studio is the place to be!</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling functionality
+        let isScrolling = false;
+        let sections = document.querySelectorAll('section');
+        let currentSection = 0;
+        let lastScrollTime = Date.now();
+        let scrollCooldown = 2000; // Increased cooldown between scrolls to 2 seconds
+
+        window.addEventListener('wheel', (e) => {
+            const currentTime = Date.now();
+            if (!isScrolling && currentTime - lastScrollTime > scrollCooldown) {
+                isScrolling = true;
+                lastScrollTime = currentTime;
+
+                // Only move one section at a time
+                if (e.deltaY > 0 && currentSection < sections.length - 1) {
+                    currentSection++;
+                } else if (e.deltaY < 0 && currentSection > 0) {
+                    currentSection--;
+                }
+
+                sections[currentSection].scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                updateNavDots();
+                
+                // Set a longer timeout for the scrolling lock
+                setTimeout(() => {
+                    isScrolling = false;
+                }, scrollCooldown);
+            }
+        });
+
+        // Navigation dots functionality
+        const navDots = document.querySelectorAll('.nav-dot');
+        
+        function updateNavDots() {
+            navDots.forEach(dot => dot.classList.remove('active'));
+            navDots[currentSection].classList.add('active');
+        }
+
+        navDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                if (!isScrolling) {
+                    isScrolling = true;
+                    lastScrollTime = Date.now();
+                    currentSection = index;
+                    sections[currentSection].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    updateNavDots();
+                    setTimeout(() => {
+                        isScrolling = false;
+                    }, scrollCooldown);
+                }
+            });
+        });
+
+        // Intersection Observer for updating nav dots on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    currentSection = Array.from(sections).indexOf(entry.target);
+                    updateNavDots();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>

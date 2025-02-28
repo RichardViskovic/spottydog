@@ -11,10 +11,7 @@
     <link rel="preload" href="imgs/fallback.png" as="image">
     <link rel="preload" href="fonts/BubblegumSans-Regular.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="fonts/Quicksand-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
-    <script>
-        lucide.createIcons();
-    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
             --pink: #ff99ff;
@@ -261,7 +258,7 @@
         }
 
         .btn {
-		text-decoration: none;
+		        text-decoration: none;
             padding: 0.8rem 1.5rem;
             border: none;
             border-radius: 2rem;
@@ -290,7 +287,7 @@
 
         /* About Section */
         #about {
-		flex-direction: column;
+		        flex-direction: column;
             background-color: var(--orange);
             padding: 2rem 1rem;
         }
@@ -349,13 +346,20 @@
             transition: color 0.3s ease;
             width: 24px;
             height: 24px;
-            display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .social-icons a:hover {
             color: var(--pink);
+        }
+
+        <!-- V logo -->
+        .v-logo {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            width: 48px;
         }
 
         /* Media Queries */
@@ -484,11 +488,12 @@
             </div>
         </div>
         <div class="social-icons">
-            <a href="https://facebook.com/spottydogstudio" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61561104336105" aria-label="Facebook"><i data-lucide="facebook">FACEBOOK</i></a>
             <a href="https://instagram.com/spottydogstudio" aria-label="Instagram"><i data-lucide="instagram"></i></a>
-            <a href="tel:+447123456789" aria-label="Phone"><i data-lucide="phone"></i></a>
-            <a href="mailto:hello@spottydogstudio.com" aria-label="Email"><i data-lucide="mail"></i></a>
+            <a href="tel:+212201115" aria-label="Phone"><i data-lucide="phone"></i></a>
+            <a href="mailto:melanie.dougan@gmail.com" aria-label="Email"><i data-lucide="mail"></i></a>
         </div>
+        <!-- <img style="width: 50vw; position: relative; right: 0; bottom: 1px" class="v-logo" src="imgs/vlogo.svg" alt="V Web Design Logo" /> --> 
     </section>
 
     <script>

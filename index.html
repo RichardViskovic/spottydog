@@ -8,12 +8,14 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
     <link rel="manifest" href="/favicons/site.webmanifest">
+    <link rel="preload" href="imgs/fallback.png" as="image">
+    <link rel="preload" href="fonts/BubblegumSans-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="fonts/Quicksand-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
     <script>
         lucide.createIcons();
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Quicksand:wght@300..700&display=swap');
         :root {
             --pink: #ff99ff;
             --blue: #D6E5FF;
@@ -133,57 +135,44 @@
             padding: 1rem;
         }
 
-        p {
-            font-family: "Quicksand", serif;
+        @font-face {
+  	    font-family: 'BubblegumSans';
+  	    src: url('fonts/BubblegumSans-Regular.ttf') format('truetype');
+	    font-weight: normal;
+  	    font-style: normal;
+	}
+	
+	@font-face {
+  	    font-family: 'Quicksand';
+	    src: url('fonts/Quicksand-VariableFont_wght.ttf') format('truetype');
+  	    font-weight: 100 900; /* Adjust the weight range if necessary */
+	    font-style: normal;
+	}
+
+
+
+	p {
+            font-family: "Quicksand", sans-serif;
             font-optical-sizing: auto;
             font-weight: 400;
             font-style: normal;
         }
 
         h1, h2 {
-            font-family: "Bubblegum Sans", serif;
+            font-family: "BubblegumSans", sans-serif;
             font-weight: 400;
             font-style: normal;
         }
 
-         <!-- Styles for the preloader */-->
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease-in-out;
-        }
 
-        .preloader.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .preloader img {
-            width: 150px;
-            height: auto;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
 
         /* Home Section */
         #home {
             position: relative;
             overflow: hidden;
             background-color: transparent;
-            flex-direction: column;
+            background: rgba(255, 255, 255, 0.6); /* White transparent overlay */
+	    flex-direction: column;
             text-align: center;
             padding: 2rem 1rem;
         }
@@ -272,6 +261,7 @@
         }
 
         .btn {
+		text-decoration: none;
             padding: 0.8rem 1.5rem;
             border: none;
             border-radius: 2rem;
@@ -300,6 +290,7 @@
 
         /* About Section */
         #about {
+		flex-direction: column;
             background-color: var(--orange);
             padding: 2rem 1rem;
         }
@@ -382,21 +373,6 @@
                 width: auto;
             }
 
-            .nav-dots {
-                left: 2rem;
-                right: auto;
-            }
-
-            .nav-dot-label {
-                left: 24px;
-                right: auto;
-            }
-
-            .nav-dot:hover .nav-dot-label {
-                left: 28px;
-                right: auto;
-            }
-
             section {
                 padding: 2rem;
             }
@@ -427,9 +403,6 @@
     </style>
 </head>
 <body>
-    <div class="preloader">
-        <img src="logo.webp" alt="Spotty Dog Studio Logo">
-    </div>
     <div class="nav-toggle">
         <div class="hamburger">
             <span></span>
@@ -445,8 +418,9 @@
 
 
     <section id="home">
-        <video class="background-video" autoplay loop muted playsinline>
+        <video class="background-video" autoplay loop muted playsinline poster="fallback.png">
             <source src="video.mp4" type="video/mp4">
+	    <img src="fallback.png" alt="fallback image">
         </video>
         <h1>Spotty Dog Studio</h1>
         <p>Art, crafts and messy play classes for kids.</p>
@@ -457,7 +431,7 @@
         <div class="services-container">
             <div class="service-column">
                 <div class="service-image">
-                    <img src="makers.jpg" alt="Mini Makers" />
+                    <img src="imgs/makers.jpg" alt="Mini Makers" />
                 </div>
                 <div class="service-content">
                     <h2>Mini Makers</h2>
@@ -470,7 +444,7 @@
             </div>
             <div class="service-column">
                 <div class="service-image">
-                    <img src="art.jpg" alt="Arts and Crafts" />
+                    <img src="imgs/art.jpg" alt="Arts and Crafts" />
                 </div>
                 <div class="service-content">
                     <h2>Arts and Crafts</h2>
@@ -483,13 +457,13 @@
             </div>
             <div class="service-column">
                 <div class="service-image">
-                    <img src="messy.jpg" alt="Messy Play" />
+                    <img src="imgs/messy.jpg" alt="Messy Play" />
                 </div>
                 <div class="service-content">
                     <h2>Messy Play</h2>
                     <p>Get ready to splash, squish, and explore in our messy play sessions. A sensory adventure perfect for curious minds.</p>
                     <div class="service-buttons">
-                        <a href="https://bookwhen.com/spottydog"><button class="btn btn-primary">Book Now</button></a>
+			    <a class="btn btn-primary" href="https://bookwhen.com/spottydog">Book Now</a>
                         <button class="btn btn-secondary">More Info</button>
                     </div>
                 </div>
@@ -500,7 +474,7 @@
     <section id="about">
         <div class="about-container">
             <div class="portrait-frame">
-                <img src="melly.jpg" alt="Portrait of Melly" />
+                <img src="imgs/melly.jpg" alt="Portrait of Melly" />
             </div>
             <div class="about-text">
                 <h2>About Spotty Dog</h2>
@@ -518,20 +492,9 @@
     </section>
 
     <script>
-            // Wait for all content to load
-        window.addEventListener('load', function() {
-            // Hide preloader
-            const preloader = document.querySelector('.preloader');
-            preloader.classList.add('fade-out');
-            
-            // Remove preloader from DOM after animation
-            setTimeout(() => {
-                preloader.style.display = 'none';
-            }, 500);
-        });
-
         // Initialize Lucide icons after DOM content is loaded
         document.addEventListener('DOMContentLoaded', function() {
+
             // Initialize navigation
             const navToggle = document.querySelector('.nav-toggle');
             const navMenu = document.querySelector('.nav-menu');
